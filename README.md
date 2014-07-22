@@ -5,15 +5,30 @@ High assurance implementation of firmware.
 
 The implementation is split into three main components and one shim component:
 
- 1.) bootblock
- 2.) rom stage
- 3.) ram stage
- 4.) loader shim
+1. bootblock
+2. rom stage
+3. ram stage
+4. loader shim
 
 ## Bootblock
 
 The bootblock is just enough machine assembler needed to bring the hardware up
 sufficiently for the entry point of romstage to be executed.
+
+The following shows the first-light hot path:
+
+    >>> hw wakes up in 16 bit real mode ---> src/cpu/x86/16bit
+                                                         |
+         +----------------<------------------------------+ /entry16.inc
+         |                                                 /reset16.inc
+         v
+         /-- hw is put into 32 bit protected mode --> src/cpu/x86/32bit
+                                                      /entry32.inc
+
+After the CPU is running in 32 bit protected mode we setup the CPU cache as as
+a kind of ‘RAM’, known as ‘CAR’ or ‘Cache As RAM’. This allows us to have
+enough of a execution enviroment to implement the rest of the romstage using a
+high-level language such as Ada.
 
 ## Rom Stage
 
