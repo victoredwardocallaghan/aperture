@@ -1,0 +1,34 @@
+##
+## Copyright (C) 2014 Edward O'Callaghan <eocallaghan@alterapraxis.com>
+##
+
+CC = gcc
+LD = ld
+OBJDUMP = objdump
+
+CFLAGS = -Wall -nostartfiles -nostdlib -static -m32
+LDFLAGS = -m elf_i386 -static
+
+OBJ = bootblock.o
+
+
+all: bootblock
+
+.PHONY: bootblock
+bootblock: bootblock.elf
+
+
+%.o: %.S
+	$(CC) $(CFLAGS) -c $< -o $@
+
+%.elf: $(OBJ)
+	$(LD) $(LDFLAGS) -o $@ $< -T bootblock.lds
+
+
+dissasm-bootblock:
+	$(OBJDUMP) -D bootblock.elf
+
+clean:
+	rm -f *.o *.elf
+
+.PHONY: dissasm-bootblock clean
