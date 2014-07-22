@@ -30,6 +30,25 @@ a kind of ‘RAM’, known as ‘CAR’ or ‘Cache As RAM’. This allows us to
 enough of a execution enviroment to implement the rest of the romstage using a
 high-level language such as Ada.
 
+### AMD CAR implementation
+
+This is described in BKDG under ‘general storage’.
+
+Typically we need to:
+
+1. turn on caching (in CR)
+2. set up WB region at "random addr"
+3. write to "random addr" something
+4. use it
+
+However, we need to switch off various speculative features via special MSR’s
+in order to avoid cache evictions due to processor speculation.
+
+One can check for evictions using performance counters as there are events for
+L1->L2 and L2->RAM (which should not happen). The random addr needs to be
+something which is fine for cache architecture it depends on if you plan to use
+L1 or L2. Note that the AMD cache is exclusive.
+
 ## Rom Stage
 
 The romstage is reasonable for the configuration of GPIO’s, possibly Super
