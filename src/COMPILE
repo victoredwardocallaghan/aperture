@@ -1,0 +1,23 @@
+### Ada part:
+
+Makefile
+
+common/aperture.ads
+lib/aperture-text_io.ads
+console/console.ads
+console/console_serial.ads
+drivers/driver.ads
+drivers/driver-uart
+drivers/driver-uart.ads
+drivers/driver-uart-uart8250io.ads
+drivers/driver-uart-uart8250io.adb
+lib/aperture-hw_io.ads
+arch/x86/x86.ads
+arch/x86/x86-io.ad
+arch/x86/x86-io.ads
+arch/x86/x86-io.adb
+cpu/car_main_entry.ads
+
+### ASM part:
+
+make -C cpu/x86/Makefile.bootblock

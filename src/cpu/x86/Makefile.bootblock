@@ -9,6 +9,10 @@ OBJDUMP = objdump
 CFLAGS = -Wall -nostartfiles -nostdlib -static -m32
 LDFLAGS = -m elf_i386 -static
 
+# for gcccar.inc macros pulled from coreboot
+INCLUDES = -I../../vendorcode/amd/agesa/f14
+INCLUDES += -I../amd/agesa
+
 OBJ = bootblock.o
 
 
@@ -19,7 +23,7 @@ bootblock: bootblock.elf
 
 
 %.o: %.S
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) $(INCLUDES) $(CFLAGS) -c $< -o $@
 
 %.elf: $(OBJ)
 	$(LD) $(LDFLAGS) -o $@ $< -T bootblock.lds
