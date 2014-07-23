@@ -34,7 +34,7 @@ package body x86.IO.PNP is
   procedure PNP_Set_Enable (Port : in Aperture.Word16; Toggle : in Boolean)
   is
   begin
-    PNP_Write (Port => Port, Index => 16#30#, Value => Toogle);
+    PNP_Write (Port => Port, Index => 16#30#, Value => Toggle);
   end PNP_Set_Enable;
 
   function PNP_Is_Enabled (Port : in Aperture.Word16) return Boolean
