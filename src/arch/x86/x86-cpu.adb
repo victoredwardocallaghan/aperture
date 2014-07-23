@@ -3,6 +3,7 @@
 --
 
 with System.Machine_Code;
+with Aperture; use Aperture;
 
 package body X86.CPU is
 

@@ -2,6 +2,8 @@
 -- Copyright (C) 2014 Edward O'Callaghan <eocallaghan@alterapraxis.com>
 --
 
+with Aperture;
+
 package X86.CPU is
 
   --
@@ -41,21 +43,21 @@ package X86.CPU is
   -- CPU specific registers.
   type CPU_Registers_Type is
     record
-      RAX : Word64;
-      RBX : Word64;
-      RCX : Word64;
-      RDX : Word64;
-      RDI : Word64;
-      RSI : Word64;
-      RBP : Word64;
-      R08 : Word64;
-      R09 : Word64;
-      R10 : Word64;
-      R11 : Word64;
-      R12 : Word64;
-      R13 : Word64;
-      R14 : Word64;
-      R15 : Word64;
+      RAX : Aperture.Word64;
+      RBX : Aperture.Word64;
+      RCX : Aperture.Word64;
+      RDX : Aperture.Word64;
+      RDI : Aperture.Word64;
+      RSI : Aperture.Word64;
+      RBP : Aperture.Word64;
+      R08 : Aperture.Word64;
+      R09 : Aperture.Word64;
+      R10 : Aperture.Word64;
+      R11 : Aperture.Word64;
+      R12 : Aperture.Word64;
+      R13 : Aperture.Word64;
+      R14 : Aperture.Word64;
+      R15 : Aperture.Word64;
     end record;
 
   Null_CPU_Regs : constant CPU_Registers_Type;
@@ -64,7 +66,6 @@ package X86.CPU is
 
   -- Size of one page (4K)
   Page_Size : constant := 4096;
-
 
   --
   -- Clear Interrupt Flag.
