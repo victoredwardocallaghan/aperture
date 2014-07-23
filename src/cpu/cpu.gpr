@@ -15,10 +15,10 @@ project CPU is
 
    for Object_Dir use "obj";
 
-   for Main use ("car_main_entry");
+   for Main use ("bootblock");
 
    package Builder is
-      for Executable ("car_main_entry.adb") use "aperture.rom";
+      for Executable ("bootblock.S") use "aperture.rom";
       for Global_Configuration_Pragmas use "../rts/restrictions.adc";
       for Global_Compilation_Switches ("Asm") use ("-mno-red-zone", "-I../../vendorcode/amd/agesa/f14", "-I../amd/agesa");
       for Global_Compilation_Switches ("Ada") use ("-mno-red-zone");
