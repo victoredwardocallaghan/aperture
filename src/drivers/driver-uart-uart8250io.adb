@@ -1,137 +1,107 @@
 --
--- Copyright (C) 2014 Edward O'Callaghan <eocallaghan@alterapraxis.com>
+--  Copyright (C) 2013  Reto Buerki <reet@codelabs.ch>
+--  Copyright (C) 2013  Adrian-Ken Rueegsegger <ken@codelabs.ch>
+--  Copyright (C) 2014 Edward O'Callaghan <eocallaghan@alterapraxis.com>
+--
+--  This program is free software: you can redistribute it and/or modify
+--  it under the terms of the GNU General Public License as published by
+--  the Free Software Foundation, either version 3 of the License, or
+--  (at your option) any later version.
+--
+--  This program is distributed in the hope that it will be useful,
+--  but WITHOUT ANY WARRANTY; without even the implied warranty of
+--  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+--  GNU General Public License for more details.
+--
+--  You should have received a copy of the GNU General Public License
+--  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 --
 
 with Aperture; use Aperture;
-with Aperture.IO; use Aperture.IO;
+with Aperture.IO;
 
-package body Driver.UART.UART8250IO is
+package body Driver.UART.UART8250IO
+is
+package IO renames Aperture.IO;
 
-  --
-  -- Generic driver to support 8250, 16450, 16550, 16550A type UART's.
-  --
+   --  Serial output address.
+   Port    : constant := 16#3f8#; -- Bases[idx]
 
-  ----------------------------------------------------------------------
-  --
-  -- UART configuration details..
-
-  -- FIXME typing??
-  -- Base addresses
-  -- type Bases is (0x3f8, 0x2f8, 0x3e8, 0x2e8);
-  Base : constant := 16#3f8#; -- Bases[idx]
-
-  -- Speed
-  BaudRate_Default : constant := 115200;
-
-  -- Nominal values
-  BaudRate_ReferenceClock     : constant := 115200;
-  BaudRate_Oversample         : constant := 1;
-
-  -- Calculate divisor. Do not floor but round to nearest integer.
-  function BaudRate_Divisor (BaudRate   : Integer;
-                             RefClk     : Integer;
-                             Oversample : Integer) return Integer
-  is
-  begin
-    return (1 + (2 * RefClk) / (BaudRate * Oversample)) / 2;
-  end BaudRate_Divisor;
-  ----------------------------------------------------------------------
-
-  ----------------------------------------------------------------------
-
-  -- Expected character delay at 1200bps is 9ms for a working UART
-  -- and no flow-control. Assume UART as stuck if shift register
-  -- or FIFO takes more than 50ms per character to appear empty.
-  --
-  -- Estimated that inb() from UART takes 1 microsecond.
-  SingleCharTimeout : constant := 50 * 1000;
-  FIFOTimeout       : constant := 16 * SingleCharTimeout;
+   --  Baud rate: 115200
+   Divisor : constant := 1;
 
    --  Return True if the send buffer is empty.
-  function UART8250_Can_Tx_Byte (Base_Port : Word16) return Boolean;
+   function Empty_Send_Buffer return Boolean;
 
-  function UART8250_Can_Tx_Byte (Base_Port : Word16) return Boolean
-  is
-    Data : Aperture.Byte;
-  begin
-    Inb(Port => Base_Port + UART_LSR, Value => Data);
-    return (Data and UART_LSR_THRE) /= 0;
-  end UART8250_Can_Tx_Byte;
+   -------------------------------------------------------------------------
 
-  procedure UART8250_Tx_Byte (Base_Port : Word16; Data : Character)
-  is
-    Tick : Integer := SingleCharTimeout;
-  begin
-    while (Tick /= 0) and not UART8250_Can_Tx_Byte (Base_Port)
-      loop
-        Outb (Port => Base_Port + UART_TBR, Value => Character'Pos(Data));
-        Tick := Tick - 1;
-    end loop;
-  end UART8250_Tx_Byte;
+   function Empty_Send_Buffer return Boolean
+   is
+      Data : Byte;
+   begin
+      IO.Inb (Port  => Port + 5,
+              Value => Data);
+      return (Data and 16#20#) /= 0;
+   end Empty_Send_Buffer;
 
-  procedure UART8250_Tx_Flush (Base_Port : Word16)
-  is
-    Tick : Integer := FIFOTimeout;
-    Result : Aperture.Byte;
-  begin
-    loop
-      Inb(Port => Base_Port + UART_LSR, Value => Result);
-      exit when not (Tick and (Result and UART_LSR_TEMP));
-      Tick := Tick - 1;
-    end loop;
-  end UART8250_Tx_Flush;
+   -------------------------------------------------------------------------
 
-  procedure UART8250_UART_Init (Base_Port : Integer; Divisor : Integer)
-  is
-  begin
-    -- Disable interrupts.
-    Outb(Port => (Base_Port + UART_IER), Value => 16#00#);
+   procedure Init
+   is
+   begin
 
-    -- Enable FIFOs
-    Outb(Port => (Base_Port + UART_FCR), Value => UART_FCR_FIFO_EN);
+      --  Disable interrupts.
 
-    -- Assert DTR and RTS so the other end is happy
-    Outb(Port => (Base_Port + UART_MCR), Value => (UART_MCR_DTR or UART_MCR_RTS));
+      IO.Outb (Port  => Port + 1,
+               Value => 0);
 
-    -- DLAB on
-    Outb(Port => (Base_Port + UART_LCR), Value => UART_LCR_DLAB);
+      --  Enable DLAB.
 
-    -- Set Baud Rate Divisor. 12 ==> 9600 Baud
-    Outb(Port => (Base_Port + UART_DLL), Value => (Divisor and 16#FF#));
-    Outb(Port => (Base_Port + UART_DLM), Value => (Shift_Right(Divisor, 8) and 16#FF#));
+      IO.Outb (Port  => Port + 3,
+               Value => 16#80#);
 
-    -- Set to 3 for 8N1
-    Outb(Port => (Base_Port + UART_LCR), Value => 16#03#);
-  end UART8250_UART_Init;
-  ----------------------------------------------------------------------
+      --  Set divisor (least/most significant byte).
 
-  ----------------------------------------------------------------------
+      IO.Outb (Port  => Port,
+               Value => Divisor);
+      IO.Outb (Port  => Port + 1,
+               Value => 0);
 
-  -- Initialise the serial port.
-  procedure Init
-  is
-    Div  : Integer;
-  begin
-    Div := BaudRate_Divisor (BaudRate_Default,
-                             BaudRate_ReferenceClock,
-                             BaudRate_Oversample);
-    UART8250_UART_Init (Base_Port => Base, Divisor => Div);
-  end Init;
+      --  Clear DLAB and set 8 bits, no parity, one stop bit (8N1).
 
-  -- Write a new line and linefeed.
-  procedure New_Line
-  is
-  begin
-    Put_Char (Item => Character'Val (10));
-  end New_Line;
+      IO.Outb (Port  => Port + 3,
+               Value => 3);
 
-  -- Write a character.
-  procedure Put_Char (Item : Character)
-  is
-  begin
-    UART8250_Tx_Byte (Base_Port => Base, Data => Item);
-    UART8250_Tx_Flush (Base_Port => Base);
-  end Put_Char;
-  ----------------------------------------------------------------------
+      --  Enable FIFO.
+
+      IO.Outb (Port  => Port + 2,
+               Value => 16#c7#);
+
+      --  IRQS enabled, RTS/DSR set.
+
+      IO.Outb (Port  => Port + 4,
+               Value => 16#0b#);
+   end Init;
+
+   -------------------------------------------------------------------------
+
+   procedure New_Line
+   is
+   begin
+      Put_Char (Item => Character'Val (10));
+   end New_Line;
+
+   -------------------------------------------------------------------------
+
+   procedure Put_Char (Item : Character)
+   is
+   begin
+      while not Empty_Send_Buffer loop
+         null;
+      end loop;
+
+      IO.Outb (Port  => Port,
+               Value => Character'Pos (Item));
+   end Put_Char;
 
 end Driver.UART.UART8250IO;
