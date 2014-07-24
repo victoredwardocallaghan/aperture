@@ -46,5 +46,5 @@ SECTIONS
 	}
 }
 
-INCLUDE "16bit/entry16.lds"
-INCLUDE "16bit/reset16.lds"
+INCLUDE "../x86/16bit/entry16.lds"
+INCLUDE "../x86/16bit/reset16.lds"
