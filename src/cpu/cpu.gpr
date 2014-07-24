@@ -18,7 +18,7 @@ project CPU is
    for Main use ("bootblock");
 
    package Builder is
-      for Executable ("bootblock.S") use "aperture.rom";
+      for Executable ("bootblock.S") use "bootblock.elf";
       for Global_Configuration_Pragmas use "../rts/restrictions.adc";
       for Global_Compilation_Switches ("Asm") use
         ("-mno-red-zone",
