@@ -2,7 +2,6 @@
 #define ARCH_CPU_H
 
 #include <stdint.h>
-#include <rules.h>
 
 /*
  * EFLAGS bits
