@@ -151,7 +151,7 @@ package body X86.CPU is
     MSR : MSR_Type;
   begin
     Get_MSR (Register => 16#1b#, MSR => MSR);
-    BSP := (MSR.Low and 16#80#);
+    BSP := (MSR.Low and 16#80#) /= 0;
   end Boot_CPU;
 
 end X86.CPU;
