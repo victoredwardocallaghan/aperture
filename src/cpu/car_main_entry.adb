@@ -14,6 +14,7 @@ package body CAR_Main_Entry is
    procedure Cache_As_RAM_Main (Bist               : Aperture.Word32;
                                 CPU_Init_DetectEDX : Aperture.Word32) is
    begin
+      Debug.Init;
       Debug.Put_Line (Item => "Booting *** Aperture *** firmware "
                      & Aperture.Version.Version_String & " ("
                      & Standard'Compiler_Version & ").");
