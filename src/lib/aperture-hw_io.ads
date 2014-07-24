@@ -8,10 +8,7 @@ with x86.IO;
 --
 -- Connects HW_IO to the ISA specific implementation
 --
-package Aperture.HW_IO is new Aperture.IO
-  (Inb   => x86.IO.Inb,
-   Outb  => x86.IO.Outb,
-   Outw  => x86.IO.Outw);
+package Aperture.HW_IO renames Aperture.IO;
 
 --
 -- Remark: This mapping should be compile-time configurable and thus generated.
