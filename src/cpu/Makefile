@@ -6,6 +6,8 @@ GIT_REV      = $(shell git describe --always --dirty="-UNCLEAN")
 
 include ../Makeconf
 
+BUILD_OPTS += --RTS=$(TOP_DIR)/rts/obj
+
 all: $(OBJ_DIR)/$(PACKAGE)
 
 $(VERSION_SPEC):
