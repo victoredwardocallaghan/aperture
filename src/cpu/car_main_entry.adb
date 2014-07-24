@@ -21,10 +21,10 @@ package body CAR_Main_Entry is
     --
     --  Do stuff???
 
-      Debug.Put_Line (Item => "<*> Bist = " & Aperture.Word32'Image (Bist));
-
-      Debug.Put_Line (Item => "<> CPU_Init_DetectEDX = "
-                     & Aperture.Word32'Image (CPU_Init_DetectEDX));
+--      Debug.Put_Line (Item => "<*> Bist = " & Aperture.Word32'Image (Bist));
+--
+--      Debug.Put_Line (Item => "<> CPU_Init_DetectEDX = "
+--                     & Aperture.Word32'Image (CPU_Init_DetectEDX));
 
    end Cache_As_RAM_Main;
 
