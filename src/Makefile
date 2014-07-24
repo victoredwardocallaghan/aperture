@@ -2,13 +2,16 @@ include Makeconf
 
 all: aperture.rom
 
+utils:
+	$(MAKE) -C ../utils/cbfstool
+
 rts:
 	$(MAKE) -C $@
 
 cpu:
 	$(MAKE) -C $@
 
-aperture.rom: rts cpu
+aperture.rom: utils rts cpu
 
 clean:
 	$(MAKE) clean -C cpu
