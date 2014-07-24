@@ -67,6 +67,7 @@ cache_as_ram_setup:
   AMD_ENABLE_STACK
 
 //  post_code(0xa1)
+  call  adainit /* initialise Ada runtime (should happen on BSP only really) */
 
   /* Restore the BIST result */
   cvtsd2si  %xmm0, %edx
