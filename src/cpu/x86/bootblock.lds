@@ -29,7 +29,9 @@ SECTIONS
 		*(.text);
 		*(.data);
 		*(.data.*);
+		*(.rodata);
 		*(.rodata.*);
+		*(.eh_frame);
 		_erom = .;
 	} >rom = 0xff
 
