@@ -1,8 +1,8 @@
-cbfs_image.o: cbfs_image.c common.h swab.h cbfs_image.h cbfs.h
 cbfs-mkpayload.o: cbfs-mkpayload.c elfparsing.h elf.h common.h swab.h \
  cbfs.h fv.h coff.h
 cbfs-mkstage.o: cbfs-mkstage.c elfparsing.h elf.h common.h swab.h cbfs.h
 cbfs-payload-linux.o: cbfs-payload-linux.c common.h swab.h cbfs.h linux.h
+cbfs_image.o: cbfs_image.c common.h swab.h cbfs_image.h cbfs.h
 cbfstool.o: cbfstool.c common.h swab.h cbfs.h cbfs_image.h fit.h
 common.o: common.c common.h swab.h cbfs.h
 compress.o: compress.c common.h swab.h

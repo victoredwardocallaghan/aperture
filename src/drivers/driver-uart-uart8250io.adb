@@ -20,9 +20,8 @@
 with Aperture; use Aperture;
 with Aperture.IO;
 
-package body Driver.UART.UART8250IO
-is
-package IO renames Aperture.IO;
+package body Driver.UART.UART8250IO is
+   package IO renames Aperture.IO;
 
    --  Serial output address.
    Port    : constant := 16#3f8#; -- Bases[idx]
@@ -33,10 +32,9 @@ package IO renames Aperture.IO;
    --  Return True if the send buffer is empty.
    function Empty_Send_Buffer return Boolean;
 
-   -------------------------------------------------------------------------
+   --------------------------------------------------------------------
 
-   function Empty_Send_Buffer return Boolean
-   is
+   function Empty_Send_Buffer return Boolean is
       Data : Byte;
    begin
       IO.Inb (Port  => Port + 5,
@@ -44,10 +42,9 @@ package IO renames Aperture.IO;
       return (Data and 16#20#) /= 0;
    end Empty_Send_Buffer;
 
-   -------------------------------------------------------------------------
+   --------------------------------------------------------------------
 
-   procedure Init
-   is
+   procedure Init is
    begin
 
       --  Disable interrupts.
@@ -83,18 +80,16 @@ package IO renames Aperture.IO;
                Value => 16#0b#);
    end Init;
 
-   -------------------------------------------------------------------------
+   --------------------------------------------------------------------
 
-   procedure New_Line
-   is
+   procedure New_Line is
    begin
       Put_Char (Item => Character'Val (10));
    end New_Line;
 
-   -------------------------------------------------------------------------
+   --------------------------------------------------------------------
 
-   procedure Put_Char (Item : Character)
-   is
+   procedure Put_Char (Item : Character) is
    begin
       while not Empty_Send_Buffer loop
          null;

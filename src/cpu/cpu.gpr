@@ -6,9 +6,9 @@ project CPU is
 
    for Source_Dirs use
      (".", "amd/agesa",
-     "x86", "x86/16bit", "x86/32bit",
-      "../common",
+      "x86", "x86/16bit", "x86/32bit",
       "../console",
+      "../common",
       "../lib",
       "../drivers",
       "../arch/x86");

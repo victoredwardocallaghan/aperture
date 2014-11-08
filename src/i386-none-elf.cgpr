@@ -49,7 +49,6 @@ configuration project Default is
    end Naming;
 
    package Linker is
-      for Driver use Compiler'Driver ("C");
       for Driver use Compiler'Driver ("Ada");
    end Linker;
 
