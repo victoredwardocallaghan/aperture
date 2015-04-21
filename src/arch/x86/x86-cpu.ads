@@ -122,7 +122,7 @@ package x86.CPU is
    --  Write specified low/high doublewords to given MSR.
    procedure Write_MSR
      (Register : Aperture.Word32;
-      MSR      : out MSR_Type);
+      MSR      : MSR_Type);
    pragma Inline_Always (Write_MSR);
 
    --

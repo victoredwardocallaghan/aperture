@@ -129,7 +129,7 @@ package body x86.CPU is
    --
    procedure Write_MSR
       (Register : Aperture.Word32;
-       MSR      : out MSR_Type) is
+       MSR      : MSR_Type) is
    begin
       System.Machine_Code.Asm
          (Template => "wrmsr",
