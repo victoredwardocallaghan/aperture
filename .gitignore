@@ -2,3 +2,4 @@
 obj/
 utils/cbfstool/cbfstool
 utils/cbfstool/rmodtool
+.dependencies
