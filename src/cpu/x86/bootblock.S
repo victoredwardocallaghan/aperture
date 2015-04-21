@@ -3,4 +3,5 @@
 #include "16bit/reset16.inc"
 #include "32bit/entry32.inc"
 
-#include "../amd/agesa/cache_as_ram.inc"
+//#include "../amd/agesa/cache_as_ram.inc"
+#include "../qemu/i440fx/cache_as_ram.inc"

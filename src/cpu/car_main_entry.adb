@@ -2,12 +2,23 @@
 --  Copyright (C) 2014 Edward O'Callaghan <eocallaghan@alterapraxis.com>
 --
 
-with Aperture.Text_IO;
+--with Aperture.Text_IO;
 with Aperture.Version;
+
+-- XXX
+with Aperture.Console;
+with Aperture.Console_Serial;
 
 package body CAR_Main_Entry is
 
-   package Debug renames Aperture.Text_IO;
+   --
+   --  Connects Text_IO to Serial Console output
+   --
+   package Debug is new Aperture.Console
+     (Initialise      => Aperture.Console_Serial.Init,
+      Output_New_Line => Aperture.Console_Serial.New_Line,
+      Output_Char     => Aperture.Console_Serial.Put_Char);
+   -- package Debug renames Aperture.Text_IO;
 
   --
   --  This is called by cache_as_ram.inc as the chosen entry point from CAR !!!
