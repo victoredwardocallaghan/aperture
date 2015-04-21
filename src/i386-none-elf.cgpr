@@ -7,14 +7,13 @@ configuration project Default is
    for Default_Language use "Ada";
    for Library_Builder  use "/opt/ada/libexec/gprbuild/gprlib";
    for Library_Support  use "full";
---   for Shared_Library_Prefix use "lib";
---   for Symbolic_Link_Supported use "true";
---   for Library_Major_Minor_Id_Supported use "true";
---   for Shared_Library_Minimum_Switches use ("-shared");
+   for Shared_Library_Prefix use "lib";
+   for Symbolic_Link_Supported use "true";
+   for Library_Major_Minor_Id_Supported use "true";
+   for Shared_Library_Minimum_Switches use ("-shared");
    for Library_Version_Switches use ("-Wl,-soname,");
-
---   for Shared_Library_Suffix use ".so";
---   for Library_Auto_Init_Supported use "true";
+   for Shared_Library_Suffix use ".so";
+   for Library_Auto_Init_Supported use "true";
 
    package Compiler is
       for Driver              ("Ada") use "/opt/ada/bin/i386-none-elf-gcc";
