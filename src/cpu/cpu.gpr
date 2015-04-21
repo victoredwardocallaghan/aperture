@@ -6,9 +6,9 @@ project CPU is
 
    for Source_Dirs use
      (".", "amd/agesa",
-     "x86", "x86/16bit", "x86/32bit",
-      "../common",
+      "x86", "x86/16bit", "x86/32bit",
       "../console",
+      "../common",
       "../lib",
       "../drivers",
       "../arch/x86");
@@ -23,7 +23,7 @@ project CPU is
       for Global_Compilation_Switches ("Asm") use
         ("-mno-red-zone",
         "-m32",
-        "-I../../vendorcode/amd/agesa/f14", "-I../amd/agesa");
+	"-I../../vendorcode/amd/agesa/f14", "-I../amd/agesa");
       for Global_Compilation_Switches ("Ada") use
         ("-mno-red-zone",
         "-m32");
@@ -32,7 +32,7 @@ project CPU is
    package Compiler is
       for Required_Switches ("Asm") use ("-x", "assembler-with-cpp");
       for Default_Switches ("Ada") use Shared.Spark_Compiler_Switches
-        & ("-Wstack-usage=8192", "-static");
+        & ("-Wstack-usage=8192", "-static", "-I../../common");
    end Compiler;
 
    -- XXX: may need to be "Asm" ???
