@@ -5,7 +5,7 @@
 with System.Machine_Code;
 with Aperture; use Aperture;
 
-package body X86.CPU is
+package body x86.CPU is
 
    --
    --
@@ -146,4 +146,4 @@ package body X86.CPU is
       BSP := (MSR.Low and 16#80#) /= 0;
    end Boot_CPU;
 
-end X86.CPU;
+end x86.CPU;

@@ -4,7 +4,7 @@
 
 with Aperture;
 
-package X86.CPU is
+package x86.CPU is
 
    --
    --  CPU specific constants
@@ -157,4 +157,4 @@ private
        High : Aperture.Word32;
      end record;
 
-end X86.CPU;
+end x86.CPU;
